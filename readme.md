@@ -1,10 +1,12 @@
-# HARLO: Harness-Driven Testing of Lowering Behaviors in DL Compilers
+# Fuzzing Deep Learning Compilers Through Systematic Exploration of Lowering Behaviors
 
 > 🚀 A unified artifact for reproducing HARLO on **PyTorch Inductor** and **Apache TVM**.
 
 ## 🔍 Overview
 
-HARLO is a harness-driven testing framework for exposing lowering-stage bugs in deep learning compilers. This repository contains the implementation used in our paper, along with the scripts needed to reproduce the main experimental results.
+HARLO is a harness-driven testing framework for exposing lowering-stage bugs in deep learning compilers.
+This repository contains the implementation used in our paper, 
+along with the scripts needed to reproduce the main experimental results.
 
 ### ✨ Highlights
 
