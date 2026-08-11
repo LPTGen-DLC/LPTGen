@@ -1,10 +1,10 @@
-# Fuzzing Deep Learning Compilers Through Systematic Exploration of Lowering Behaviors
+# Configuration-Driven Fuzzing for Deep Learning Compiler Lowering
 
-> 🚀 A unified artifact for reproducing HARLO on **PyTorch Inductor** and **Apache TVM**.
+> 🚀 A unified artifact for reproducing LPTGen on **PyTorch Inductor** and **Apache TVM**.
 
 ## 🔍 Overview
 
-HARLO is a harness-driven testing framework for exposing lowering-stage bugs in deep learning compilers.
+LPTGen is a harness-driven testing framework for exposing lowering-stage bugs in deep learning compilers.
 This repository contains the implementation used in our paper, 
 along with the scripts needed to reproduce the main experimental results.
 
@@ -12,7 +12,7 @@ along with the scripts needed to reproduce the main experimental results.
 
 - Supports **two DL compilers**: PyTorch Inductor and Apache TVM.
 - Includes **Two reusable prompts** used by the LLM-assisted workflow.
-- Summarizes the **84 previously unknown bugs** discovered by HARLO.
+- Summarizes the **84 previously unknown bugs** discovered by LPTGen.
 - Reproduces **coverage** results (Fig 7 and 8 in our paper)
 
 ## 📁 Repository Layout
@@ -50,7 +50,7 @@ pip install -r requirements.txt
 
 
 ## 🔑 LLM Configuration
-> HARLO uses LLM-backed generation utilities. The checked-in code no longer contains private tokens.
+> LPTGen uses LLM-backed generation utilities. The checked-in code no longer contains private tokens.
 Please check the file [`Torch/src/utils/llm_utils.py`](./Torch/src/utils/llm_utils.py) and file [`TVM/src/llm_utils.py`](./TVM/src/llm_utils.py) for update
 
 ### Environment variables
@@ -60,7 +60,7 @@ Please check the file [`Torch/src/utils/llm_utils.py`](./Torch/src/utils/llm_uti
 If your deployment uses the same credential for both clients, you can simply set `CODE_MODEL_API_KEY` to the same value as `LLM_API_KEY`.
 
 
-## ▶️ Running HARLO
+## ▶️ Running LPTGen
 
 ### PyTorch Inductor
 > Run the PyTorch pipeline from the `Torch` side of the repository using the scripts in [`Torch/`](./Torch/).
