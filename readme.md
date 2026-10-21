@@ -86,7 +86,7 @@ python fuzz.py
 - ✅ **Fixed** · [Issue #174459](https://github.com/pytorch/pytorch/issues/174459) · `sort` · Incorrect code logic · Inconsistency
 - ✅ **Fixed** · [Issue #174174](https://github.com/pytorch/pytorch/issues/174174) · `remainder` · Incorrect numerical computation · Inconsistency
 - ✅ **Fixed** · [Issue #174172](https://github.com/pytorch/pytorch/issues/174172) · `copysign` · Type problem · Inconsistency
-- 🔎 **Confirmed** · [Issue #174176](https://github.com/pytorch/pytorch/issues/174176) · `set` · Incorrect exception handling · Crash
+- ✅ **Fixed** · [Issue #174176](https://github.com/pytorch/pytorch/issues/174176) · `set` · Incorrect exception handling · Crash
 - ✅ **Fixed** · [Issue #173987](https://github.com/pytorch/pytorch/issues/173987) · `eq` · Type problem · Inconsistency
 - ✅ **Fixed** · [Issue #173624](https://github.com/pytorch/pytorch/issues/173624) · `vdot + matrix_exp_backward` · Incorrect exception handling · Segmentation fault
 - ✅ **Fixed** · [Issue #173478](https://github.com/pytorch/pytorch/issues/173478) · `atan + special_psi` · Incorrect code logic · Inconsistency
@@ -111,10 +111,10 @@ python fuzz.py
 - ✅ **Fixed** · [Issue #171262](https://github.com/pytorch/pytorch/issues/171262) · `isin` · Tensor-shape problem · Inconsistency
 - 🔎 **Confirmed** · [Issue #171259](https://github.com/pytorch/pytorch/issues/171259) · `multilabel_margin_loss` · Incorrect exception handling · Crash
 - ✅ **Fixed** · [Issue #171256](https://github.com/pytorch/pytorch/issues/171256) · `trapezoid` · Incorrect code logic · Inconsistency
-- 🔎 **Confirmed** · [Issue #170782](https://github.com/pytorch/pytorch/issues/170782) · `_no_grad_embedding_renorm_` · Concurrency · Crash
+- ✅ **Fixed** · [Issue #170782](https://github.com/pytorch/pytorch/issues/170782) · `_no_grad_embedding_renorm_` · Concurrency · Crash
 - 🔎 **Confirmed** · [Issue #170762](https://github.com/pytorch/pytorch/issues/170762) · `cudnn_batch_norm_backward` · Type problem · Inconsistency
 - 🔎 **Confirmed** · [Issue #170745](https://github.com/pytorch/pytorch/issues/170745) · `poisson_nll_loss` · Type problem · Inconsistency
-- 🔎 **Confirmed** · [Issue #170688](https://github.com/pytorch/pytorch/issues/170688) · `__interpolate` · Incorrect code logic · Inconsistency
+- ✅ **Fixed** · [Issue #170688](https://github.com/pytorch/pytorch/issues/170688) · `__interpolate` · Incorrect code logic · Inconsistency
 - 🔎 **Confirmed** · [Issue #170686](https://github.com/pytorch/pytorch/issues/170686) · `_to_sparse_bsc` · API misuse · Crash
 - 🔎 **Confirmed** · [Issue #170684](https://github.com/pytorch/pytorch/issues/170684) · `cosine_similarity` · Type problem · Inconsistency
 - ✅ **Fixed** · [Issue #170682](https://github.com/pytorch/pytorch/issues/170682) · `__upsample_nearest` · Incorrect assignment · Inconsistency
@@ -125,7 +125,7 @@ python fuzz.py
 
 ### Apache TVM (45 bugs)
 
-- ⏳ **Awaiting** · [Issue #18380](https://github.com/apache/tvm/issues/18380) · `AutoInline` · Unclassified · Crash
+- ✅ **Fixed** · [Issue #18380](https://github.com/apache/tvm/issues/18380) · `AutoInline` · Unclassified · Crash
 - ✅ **Fixed** · [Issue #18769](https://github.com/apache/tvm/issues/18769) · `where + tan` · Type problem · Crash
 - ✅ **Fixed** · [Issue #18767](https://github.com/apache/tvm/issues/18767) · `fast_tanh` · Type problem · Crash
 - ✅ **Fixed** · [Issue #18767](https://github.com/apache/tvm/issues/18767) · `fast_exp` · Type problem · Crash
@@ -134,9 +134,9 @@ python fuzz.py
 - ✅ **Fixed** · [Issue #18729](https://github.com/apache/tvm/issues/18729) · `asin` · Type problem · Crash
 - ✅ **Fixed** · [Issue #18425](https://github.com/apache/tvm/issues/18425) · `llvm.log2` · Type problem · Crash
 - ✅ **Fixed** · [Issue #18425](https://github.com/apache/tvm/issues/18425) · `llvm.log` · Type problem · Crash
-- ⏳ **Awaiting** · [Issue #18424](https://github.com/apache/tvm/issues/18424) · `RewriteParallelVectorizeUnroll` · Unclassified · Segmentation fault
-- ⏳ **Awaiting** · [Issue #18423](https://github.com/apache/tvm/issues/18423) · `RewriteFuseSplitParallelVectorize` · Unclassified · Segmentation fault
-- ⏳ **Awaiting** · [Issue #18393](https://github.com/apache/tvm/issues/18393) · `FlattenBuffer` · Unclassified · Segmentation fault
+- ✅ **Fixed** · [Issue #18424](https://github.com/apache/tvm/issues/18424) · `RewriteParallelVectorizeUnroll` · Unclassified · Segmentation fault
+- ✅ **Fixed** · [Issue #18423](https://github.com/apache/tvm/issues/18423) · `RewriteFuseSplitParallelVectorize` · Unclassified · Segmentation fault
+- ✅ **Fixed** · [Issue #18393](https://github.com/apache/tvm/issues/18393) · `FlattenBuffer` · Unclassified · Segmentation fault
 - ✅ **Fixed** · [Issue #18387](https://github.com/apache/tvm/issues/18387) · `tir.AssertStmt` · Missing regression coverage · Crash
 - ✅ **Fixed** · [Issue #18387](https://github.com/apache/tvm/issues/18387) · `tir.StringImm` · Missing regression coverage · Crash
 - ✅ **Fixed** · [Issue #18383](https://github.com/apache/tvm/issues/18383) · TIR scheduling · Incorrect code logic · Crash
@@ -160,7 +160,7 @@ python fuzz.py
 - ✅ **Fixed** · [Issue #17941](https://github.com/apache/tvm/issues/17941) · `conv1d` · Incorrect code logic · Crash
 - ✅ **Fixed** · [Issue #17938](https://github.com/apache/tvm/issues/17938) · `global_pool` · Type problem · Crash
 - ⏳ **Awaiting** · [Issue #17937](https://github.com/apache/tvm/issues/17937) · `group_norm` · Unclassified · Crash
-- ⏳ **Awaiting** · [Issue #17936](https://github.com/apache/tvm/issues/17936) · `group_norm` · Unclassified · Crash
+- ✅ **Fixed** · [Issue #17936](https://github.com/apache/tvm/issues/17936) · `group_norm` · Unclassified · Crash
 - ⏳ **Awaiting** · [Issue #17935](https://github.com/apache/tvm/issues/17935) · `log_softmax` · Unclassified · Inconsistency
 - ⏳ **Awaiting** · [Issue #17934](https://github.com/apache/tvm/issues/17934) · `pool_grad` · Unclassified · Crash
 - ✅ **Fixed** · [Issue #17933](https://github.com/apache/tvm/issues/17933) · `scale_shift_nhwc` · Incorrect code logic · Crash
