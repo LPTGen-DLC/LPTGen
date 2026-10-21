@@ -1,6 +1,6 @@
 # Prompt Descriptions: Seed Generation and Predicate-Guided Mutation
 
-This file documents the two core prompt templates used by HARLO for operator-level test generation.
+This file documents the two core prompt templates used by LPTGen for operator-level test generation.
 
 ## 1. Common Lowering-Path Seed Generation
 
