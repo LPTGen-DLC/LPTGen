@@ -61,7 +61,10 @@ def get_all_operators():
         lower_conditions = []
         lower_func = extract_lowering_conditions.get_lowering_func(schema)
         if lower_func:
-            lower_conditions = extract_lowering_conditions.extract_conditions_from_fn(lower_func)
+            configuration_slots = {arg.name: ("tensor" if "Tensor" in str(arg.type) else "attribute")
+                                   for arg in schema.arguments}
+            lower_conditions = extract_lowering_conditions.extract_conditions_from_fn(
+                lower_func, configuration_slots=configuration_slots)
             print(f'[INFO] The conditions of {schema.name} is: ', lower_conditions)
 
         doc_str = None

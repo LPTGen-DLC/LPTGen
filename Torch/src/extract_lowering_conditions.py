@@ -5,6 +5,11 @@ import textwrap
 import torch
 import torch._inductor.utils as utils
 import torch._inductor.ir as ir
+import importlib.util
+import logging
+import os
+from pathlib import Path
+from functools import lru_cache
 
 
 def get_lowering_func(_schema):
@@ -21,7 +26,7 @@ def get_lowering_func(_schema):
     return None
 
 
-def extract_conditions_from_fn(fn):
+def _extract_legacy_conditions_from_fn(fn):
     try:
         src = inspect.getsource(fn)
         # print(src)
@@ -42,6 +47,27 @@ def extract_conditions_from_fn(fn):
     Visitor().visit(tree)
     print(f"[INFO] The knowledge of is {conds}")
     return list(set(conds))
+
+
+@lru_cache(maxsize=1)
+def _load_def_use():
+    path = Path(__file__).resolve().with_name("lowering_def_use.py")
+    spec = importlib.util.spec_from_file_location("lptgen_lowering_def_use", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def extract_conditions_from_fn(fn, configuration_slots=None):
+    """Preserve list[str] API; retain legacy behavior on optional-analysis failure."""
+    legacy = _extract_legacy_conditions_from_fn(fn)
+    if os.getenv("LPTGEN_DEF_USE", "1").lower() in {"0", "false", "off"}:
+        return legacy
+    try:
+        return _load_def_use().select_conditions(fn, legacy, configuration_slots)
+    except Exception as exc:
+        logging.getLogger(__name__).warning("Def-use unavailable; using legacy predicates: %s", exc)
+        return legacy
 
 def collect_op_lowering_knowledge():
     knowledge = {}

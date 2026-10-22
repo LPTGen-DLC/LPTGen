@@ -4,11 +4,16 @@ import inspect
 import json
 import pkgutil
 import textwrap
+import importlib.util
+import logging
+import os
+from pathlib import Path
+from functools import lru_cache
 from types import ModuleType
 from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 
-def extract_conditions_from_fn(fn) -> List[str]:
+def _extract_legacy_conditions_from_fn(fn) -> List[str]:
     """Extract branch predicates from a Python function body."""
     try:
         src = inspect.getsource(fn)
@@ -37,6 +42,27 @@ def extract_conditions_from_fn(fn) -> List[str]:
 
     Visitor().visit(tree)
     return sorted(set(conds))
+
+
+@lru_cache(maxsize=1)
+def _load_def_use():
+    path = Path(__file__).resolve().with_name("lowering_def_use.py")
+    spec = importlib.util.spec_from_file_location("lptgen_lowering_def_use", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def extract_conditions_from_fn(fn, configuration_slots=None) -> List[str]:
+    """Use def-use predicates where supported, otherwise keep legacy extraction."""
+    legacy = _extract_legacy_conditions_from_fn(fn)
+    if os.getenv("LPTGEN_DEF_USE", "1").lower() in {"0", "false", "off"}:
+        return legacy
+    try:
+        return _load_def_use().select_conditions(fn, legacy, configuration_slots)
+    except Exception as exc:
+        logging.getLogger(__name__).warning("Def-use unavailable; using legacy predicates: %s", exc)
+        return legacy
 
 
 def _get_tvm_topi_root():
