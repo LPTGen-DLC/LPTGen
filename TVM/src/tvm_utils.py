@@ -13,13 +13,16 @@ def generate_te_placeholder(para_name, tensor_spec):
 def get_tvm_template(test_header_str, passes):
     # target = random.choice(['llvm --num-cores=16', 'nvidia/geforce-rtx-3090'])
     target = 'llvm --num-cores=16'
-
     tvm_test_template = f'''import tvm
 from tvm import te, topi, tir
 from tvm import meta_schedule as ms
 import numpy as np
 import os, sys, shutil
 
+try:
+    from test_oracle import try_reference, assert_reference_outputs, NondeterministicReference
+except ImportError:
+    try_reference = None
 
 def compile_mod(mod, np_input_list, op_outputs, opt_level=3):
     with tvm.transform.PassContext(opt_level):
@@ -36,10 +39,25 @@ def compile_mod(mod, np_input_list, op_outputs, opt_level=3):
 
 
 {test_header_str}
+python_reference = None
+oracle_reason = "optional reference helper or operator metadata absent"
+if use_python_reference and try_reference is not None:
+    try:
+        python_reference, oracle_reason = try_reference(
+            globals().get('oracle_op_name'), input_config,
+            globals().get('np_input_by_name', {{}}))
+    except NondeterministicReference as exc:
+        print(f"[ORACLE] Invalid test: {{exc}}")
+        sys.exit(99)
+    except Exception as exc:
+        oracle_reason = f"reference preparation failed: {{exc}}"
+print(f"[ORACLE] {{oracle_reason}}; mode={{'independent' if python_reference is not None else 'legacy'}}")
 sch = tir.Schedule(te.create_prim_func(te_var_list_str+op_outputs).with_attr('target', tvm.target.Target('llvm')))
 if not hasattr(op_outputs[0], "shape"):
     sys.exit(0)
 ref_output = compile_mod(sch.mod, np_inputs, op_outputs, opt_level=0)
+if python_reference is not None:
+    assert_reference_outputs(python_reference, ref_output)
 
 if os.path.exists('./tune_tmp'):
     shutil.rmtree('./tune_tmp')
@@ -52,9 +70,12 @@ with tvm.ir.transform.PassContext(opt_level=4):
     opt_mod = tvm.ir.transform.Sequential(passes)(sch.mod)
 opt_mod_output = compile_mod(opt_mod, np_inputs, op_outputs, opt_level=4)
 
-for i in range(len(ref_output)):
-    np.testing.assert_allclose(ref_output[i].numpy(), opt_mod_output[i].numpy(), rtol=1e-5, atol=1e-5, 
-    err_msg=f"An inconsistency detected.")
+if python_reference is not None:
+    assert_reference_outputs(python_reference, opt_mod_output)
+else:
+    for i in range(len(ref_output)):
+        np.testing.assert_allclose(ref_output[i].numpy(), opt_mod_output[i].numpy(), rtol=1e-5, atol=1e-5,
+        err_msg=f"An inconsistency detected.")
 print("No bug found!")
 
 '''
@@ -183,6 +204,10 @@ def model_func({params_str}):
                       f"    op_outputs = [op_outputs]\n"
 
     test_header_str += np_input_str + te_var_list_str
+    # Keep the same concrete values and parameter names for the optional reference.
+    test_header_str += "use_python_reference = True\n"
+    test_header_str += f"oracle_op_name = {op_name!r}\n"
+    test_header_str += f"np_input_by_name = dict(zip({list(inputs_dict)!r}, np_inputs))\n"
     return test_header_str, model_func_str, f"{te_placeholder_str}\n{new_config_str}"
 
 

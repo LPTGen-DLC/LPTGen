@@ -21,6 +21,8 @@ def mutate_op_seq(seed_test_file, model_func_str, seed_input_config, sub_op_func
         seed_str = f.read()
     mutated_func = mutate_fusion_llm(model_func_str, sub_op, sub_op_sig, seed_input_config, sub_op_doc)
     new_test = seed_str.replace(model_func_str, mutated_func)
+    # A single-operator reference cannot validate a fused model.
+    new_test = new_test.replace("use_python_reference = True", "use_python_reference = False")
     return new_test
 
 

@@ -319,6 +319,12 @@ if __name__ == "__main__":
         os.makedirs(bugs_dir)
         shutil.copy("./collects_apis.py", test_dir)
 
+    # Keep the optional reference helper beside generated and saved tests.
+    oracle_helper = os.path.join(os.path.dirname(__file__), "test_oracle.py")
+    if os.path.isfile(oracle_helper):
+        for output_dir in (test_dir, bugs_dir):
+            shutil.copy(oracle_helper, output_dir)
+
     namespace_list = ["topi", "topi.nn", "topi.image", "topi.cpp"]  # "topi.gpu"
     main(namespace_list)
 

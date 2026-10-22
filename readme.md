@@ -8,13 +8,6 @@ LPTGen is a harness-driven testing framework for exposing lowering-stage bugs in
 This repository contains the implementation used in our paper, 
 along with the scripts needed to reproduce the main experimental results.
 
-### ✨ Highlights
-
-- Supports **two DL compilers**: PyTorch Inductor and Apache TVM.
-- Includes **Two reusable prompts** used by the LLM-assisted workflow.
-- Summarizes the **79 previously unknown bugs** discovered by LPTGen.
-- Reproduces **coverage** results (Fig 7 and 8 in our paper)
-
 ## 📁 Repository Layout
 
 - [`requirements.txt`](./requirements.txt) lists the Python dependencies used by the artifact.
