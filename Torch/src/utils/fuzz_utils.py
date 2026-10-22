@@ -68,7 +68,6 @@ def get_all_unique_bugs(bug_file):
         if res not in all_bugs and not is_duplicate_bug(res, all_bugs):
                 all_bugs.add(res)
                 print(res)
-                # print('*'*100)
     print(len(all_bugs))
     return all_bugs
 
@@ -99,9 +98,3 @@ def get_all_seed_file(tests_dir):
 
 if __name__ == '__main__':
     ut_pure = get_all_unique_bugs("../res/res_fuzzer_log.txt")
-    # ut_ut = get_all_unique_bugs("../res/res_ut_ut.txt")
-    # ut_nnsmith = get_all_unique_bugs("../res/res_ut_nnsmith.txt")
-    # ut_hirgen = get_all_unique_bugs("../res/res_ut_hirgen.txt")
-    # total_bugs = ut_hirgen - ut_nnsmith - ut_ut
-    # print(total_bugs)
-    # print(len(total_bugs))

@@ -6,7 +6,6 @@ def rename_file(info_f, new_info):
     with open(info_f, 'r') as f:
         all_content = f.read()
         all_content = all_content.replace('/path/to/whitefox/tvm/', '/software/tvm/')  # replace with your local TVM path mapping
-        # all_content = all_content.replace('/path/to/tvm/', '/software/tvm/')  # replace with your local TVM path mapping if needed
     with open(new_info, 'w') as f:
         f.write(all_content)
     return

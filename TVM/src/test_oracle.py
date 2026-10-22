@@ -20,7 +20,7 @@ class NondeterministicReference(ValueError):
     pass
 
 
-# No suffix/name guessing: these are reviewed operator-to-reference relationships.
+# Verified operator-to-reference mappings.
 # TODO: Verify conv/pool/normalization adapters and mixed-precision/layout contracts
 # before expanding coverage. Their mere presence in testing is not a mapping.
 _REFERENCE_NAMES = {
@@ -108,7 +108,7 @@ def _reference_outputs(value):
     values = value if isinstance(value, (list, tuple)) else [value]
     if len(values) != 1 or not isinstance(values[0], np.ndarray):
         raise ReferenceUnavailable("unexpected reference output structure")
-    # Snapshot outputs, since a second call could otherwise modify an earlier view.
+    # Copy outputs before repeating the reference call.
     return [values[0].copy()]
 
 
@@ -153,7 +153,7 @@ def try_reference(op_name, input_config, numpy_inputs):
         call.apply_defaults()
         bound = call.arguments
         args, kwargs = _reference_arguments(op_name, bound)
-        # Validate the installed version before calling: existence alone is insufficient.
+        # Check the installed reference signature.
         signature = inspect.signature(reference)
         if set(signature.parameters) != _REFERENCE_PARAMETERS[_REFERENCE_NAMES[op_name]]:
             raise ReferenceUnavailable("reference signature differs from the verified adapter")

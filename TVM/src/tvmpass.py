@@ -176,7 +176,6 @@ class PassDependenceGraph:
 
     def recover(self, names):
         pass_nodes = [self.tir_pass_nodes[name] for name in names if name in self.tir_pass_nodes]
-        # return [pass_node.mutate() for pass_node in pass_nodes]
         return pass_nodes
 
     def export_name(self, pass_nodes):

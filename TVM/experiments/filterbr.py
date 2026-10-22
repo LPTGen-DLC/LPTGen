@@ -96,7 +96,6 @@ def filter_lcov_trace(lines):
                 nrs = set()  # no condition in this file
             else:
                 nrs = set(cond_lines_from_file(file_name))
-                # print(file_name, nrs)
         elif line.startswith('BRDA:'):
             xs = line[5:].split(',')
             nr = int(xs[0]) if xs else 0
@@ -116,8 +115,6 @@ def filter_lcov_trace_file(s_filename, d_file):
 
 
 if __name__ == '__main__':
-    # for l in cond_lines_from_file(sys.argv[1]):
-    #  print(l)
 
     # filter_lcov_trace_file(sys.argv[1], sys.stdout)
     # filter_lcov_trace_file(sys.argv[1], sys.argv[2])

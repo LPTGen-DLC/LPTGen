@@ -84,7 +84,6 @@ def select_transforms():
     if bool(config.get("tir.instrument_lwp", False)):
         passes.append("tir.transform.InstrumentProfileIntrinsics()")
 
-    # passes = pick_n_passes(passes, 10)
     passes.extend(
         [
             # Bind the target first so that target-specific attributes are available.
@@ -147,8 +146,4 @@ if __name__ == '__main__':
     op_config = {'data': data, 'output_size': (112, 112), 'pool_type': 'max', 'layout': 'NCHW', }
     op_output = topi.nn.adaptive_pool(**op_config)
     sch = tir.Schedule(te.create_prim_func([data, op_output]).with_attr("target", tvm.target.Target("llvm")))
-    # mod = tir.transform.MakePackedAPI()(sch.mod)
-    # print(mod)
-    # mod = tir.transform.FP8StorageLegalize()(mod)
-    #
     select_transforms()

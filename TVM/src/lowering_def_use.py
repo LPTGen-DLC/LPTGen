@@ -27,7 +27,7 @@ class Binding:
 
 
 class Analyzer:
-    # These methods only read metadata; helper functions are deliberately absent.
+    # Only allow metadata reads.
     METADATA = {"get_size": "shape", "size": "shape", "get_dtype": "dtype",
                 "dim": "ndim", "ndimension": "ndim"}
     ATTRIBUTES = {"shape", "dtype", "ndim"}
@@ -187,11 +187,11 @@ class Analyzer:
             else:
                 env[target.id] = value
         elif isinstance(target, (ast.Tuple, ast.List)):
-            # Exact literal tuple/list unpacking only; no zip/shape-rank assumptions.
+            # Only unpack literal tuples and lists.
             if (value and isinstance(value.expression, (ast.Tuple, ast.List))
                     and len(target.elts) == len(value.expression.elts)):
                 for dest, item in zip(target.elts, value.expression.elts):
-                    # Re-resolve against original slot roots, not reassigned locals.
+                    # Resolve against original input roots.
                     roots = {name: Binding(ast.Name(id=name, ctx=ast.Load()), [name])
                              for name in value.slots}
                     try:
@@ -203,7 +203,7 @@ class Analyzer:
                 for dest in target.elts:
                     self.assign(dest, None, env)
         else:
-            # Attribute/subscript writes can mutate aliased input metadata/state.
+            # Writes may mutate aliased inputs.
             env.clear()
 
     def block(self, statements, env):
@@ -217,7 +217,7 @@ class Analyzer:
                     value = self.resolve(expression, env) if expression is not None else None
                 except Unresolved:
                     value = None
-                # Even an unused unknown call may mutate arguments/aliases.
+                # Unknown calls may mutate inputs.
                 if expression is not None and any(isinstance(n, (ast.Call, ast.NamedExpr,
                         ast.Await, ast.Yield, ast.YieldFrom)) for n in ast.walk(expression)):
                     if not self.effect_free(expression, env):
@@ -246,7 +246,7 @@ class Analyzer:
                 right = self.block(node.orelse, env)
                 env = self.merge(left, right)
             elif isinstance(node, ast.Assert):
-                # Invocation requirements are not dispatch decisions.
+                # Exclude invocation requirements from dispatch conditions.
                 self.skipped.append({"guard": ast.unparse(node.test), "line": node.lineno,
                                      "reason": "assertion is a validity constraint", "kind": "assert"})
                 if not self.effect_free(node.test, env):
@@ -256,7 +256,7 @@ class Analyzer:
                     self.guard(node.value.test, env, "ifexp")
                 return env
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-                # Do not walk nested scopes; decorators/defaults can have effects.
+                # Skip nested scopes; decorators and defaults may have effects.
                 env.clear()
             elif isinstance(node, ast.Expr):
                 if isinstance(node.value, ast.Constant):

@@ -29,7 +29,6 @@ def get_lowering_func(_schema):
 def _extract_legacy_conditions_from_fn(fn):
     try:
         src = inspect.getsource(fn)
-        # print(src)
     except (OSError, IOError):
         return []
     src = textwrap.dedent(src)
@@ -73,13 +72,8 @@ def collect_op_lowering_knowledge():
     knowledge = {}
     for op, fn in lowering.lowerings.items():
         op = str(op)
-        # if op.startswith("aten.__"):
-        #     # print(f"[INFO] Skip {op}")
-        #     continue
         if not str(op).startswith("aten"):
-            # print(f"[INFO] Skip {op}")
             continue
-        # print(f"[INFO] Begin parse lowering knowledge of {op}")
         try:
             knowledge[op.replace('.', '::')] = extract_conditions_from_fn(fn)
         except OSError:

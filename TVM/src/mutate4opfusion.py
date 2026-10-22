@@ -62,7 +62,6 @@ The full mutated function is:
     print(prompt_str)
     res_str = call_llm(prompt_str, stop_str='return out```')
 
-    # get clear result
     print(f"[DEBUG], Ori output: {res_str}")
     res_str = post_formal_for_llm(res_str)
     if len(res_str.split('\n')) <= 3:
@@ -80,5 +79,3 @@ if __name__ == '__main__':
 """
 
     res = mutate_fusion_llm(ori_model, "torch.ops.aten.argwhere", 'aten::argwhere(Tensor self) -> Tensor', '', )
-
-# res = mutate_fusion_llm_via_FIM(ori_model, "torch.ops.aten.argwhere", 'aten::argwhere(Tensor self) -> Tensor','',)

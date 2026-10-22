@@ -49,7 +49,6 @@ class IRMutator:
     def validate_mutated_program(self, mutated_file, mutated_program_str, max_retries=5):
         retry_count = 0
         while retry_count < max_retries:
-            # valid validation
             from utils import fuzz_utils
             ret_code, _, stderr = fuzz_utils.run_test(mutated_file)
             if ret_code:
@@ -101,7 +100,6 @@ def mutate_iteration(all_seed_list, pass_file, target_dir):
             pass_name = this_pass['pass_name']
             pass_pattern = this_pass['pattern']
 
-            # mutate the seed_str on this_pass
             mutated_program = mutator.mutate_program(seed_str, pass_name, pass_pattern)
             print(mutated_program)
             target_file_name = f"{seed_file.split('/')[-1][:-3]}_{pass_name}_{mutation_cnt}.py"
@@ -120,7 +118,6 @@ def mutate_iteration(all_seed_list, pass_file, target_dir):
 
 
 def test_single_mutate():
-    # Testing
     file_path = "../results/triton_code_seed/888.py"
     pass_file = "/path/to/collect_pass/triton_passes.json"  # replace with your local pass file path
 
@@ -131,7 +128,6 @@ def test_single_mutate():
         passes = json.load(file)
     for item in passes:
         pass_name = item['pass_name']
-        # pass_description = item['description']
         pass_pattern = item['pattern']
 
     mutated_program = mutator.mutate_program(seed_str, pass_name, pass_pattern)

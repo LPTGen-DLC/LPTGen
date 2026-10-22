@@ -40,8 +40,6 @@ def cov_init():
         if status:
             raise Exception('Fail in deleting gcda files')
 
-# -----------------------------
-# Global variable
 class G:
     test_num = 0
     succeed_num = 0
@@ -84,9 +82,6 @@ def check_para_validity(param_config_list_str, true_param_list, op_name):
     return processed_params_config_list
 
 
-# ------------------------------
-# Module: Smart Input Generation
-# ------------------------------
 def generate_para_configs(op_func: Callable, config_size):
     """Dynamically generate valid inputs for any operator"""
     op_name = op_func.__name__
@@ -96,7 +91,6 @@ def generate_para_configs(op_func: Callable, config_size):
     true_param_list = [p.name for p in sig.parameters.values()]
     if 'Parameters' not in doc_str:
         doc_str += f"\nParameters are: {true_param_list}\n"
-    # print(true_param_list)
 
     prompt_str = f"""Generate {config_size} diverse API parameter configurations for {op_name} strictly following requirements:
 
@@ -128,9 +122,6 @@ def generate_para_configs(op_func: Callable, config_size):
     return params_config_list
 
 
-# ------------------------------
-# Module: Safe schedule
-# ------------------------------
 def apply_safe_schedule(
         sch: Schedule,
         pass_name: str,
@@ -156,28 +147,16 @@ def apply_safe_transform(mod):
     return mod
 
 
-# ------------------------------
-# Module: Generate test and Execute Differential Testing
-# ------------------------------
 def fuzz_single_api(op_name: str, op_func: Callable, all_operators, max_schedules: int = 3):
     para_config_list = generate_para_configs(op_func, 5)
-    # para_config_list = [
-    #     {'data': [(1, 3, 224, 224), "float32"], 'output_size': (112, 112), 'pool_type': 'max', 'layout': 'NCHW'}]
     for test_id, para_config in enumerate(para_config_list):
         te_placeholder_str, new_config, inputs_dict = tvm_utils.generate_api_inputs(para_config)
         print(f'[INFO] generated config for the {op_name}:', new_config)
 
         test_header_str, model_func_str, input_config = tvm_utils.gen_test_header_str(op_name, te_placeholder_str, new_config, inputs_dict)
-        # applied_passes = []
-        # for _ in range(max_schedules):
-        #     pass_name, pass_func = random.choice(all_schedules)
-        #     if apply_safe_schedule(sch, pass_name):
-        #         applied_passes.append(pass_name)
-        # mod = apply_safe_transform(sch.mod)
 
         passes = collects_apis.select_transforms()
         full_test_str = tvm_utils.get_tvm_template(test_header_str, passes)
-        # print(full_test_str)
 
         new_test_file_name = f"{op_name}_{test_id}.py"
         new_test_path = os.path.join(test_dir, new_test_file_name)
@@ -253,9 +232,6 @@ def multi_process_fuzz(all_tasks, num_processes):
     print(f"Fuzzing completed. Found {bug_count} bugs. See bug.txt for details.")
 
 
-# ------------------------------
-# Module: Main Test Runner
-# ------------------------------
 def main(namespace_list):
     total_test_num = 0
     fuzz_start_time = time.time()
@@ -278,12 +254,8 @@ def main(namespace_list):
 
     for i, (op_name, op_func) in enumerate(all_operators):
         all_tasks.append([op_name, op_func, all_operators])
-        # print(op_name)
 
-        # if 'topi.get_const_tuple' in op_name:
-        #     restart_index = i + 1
         # fuzz_single_api(op_name, op_func, all_operators)
-    # assert False, f'restart from the id: {restart_index}'
 
     # Fuzz batch_size lowering APIs at once!
     batch_size = 6

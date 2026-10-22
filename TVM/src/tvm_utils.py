@@ -6,12 +6,10 @@ from tvm import te, tir
 def generate_te_placeholder(para_name, tensor_spec):
     _shape, _dtype = tensor_spec
     te_statement = f"te.placeholder({_shape}, dtype='{_dtype}', name='{para_name}')"
-    # te_statement = eval(te_statement)
     return te_statement
 
 
 def get_tvm_template(test_header_str, passes):
-    # target = random.choice(['llvm --num-cores=16', 'nvidia/geforce-rtx-3090'])
     target = 'llvm --num-cores=16'
     tvm_test_template = f'''import tvm
 from tvm import te, topi, tir
@@ -94,14 +92,6 @@ def generate_api_inputs(para_config):
             te_str = generate_te_placeholder(name, para_val)
             te_placeholder_str += f"    {name} = {te_str}\n"
             para_val = name
-        # elif isinstance(para_val, (list, tuple)) and isinstance(para_val[0], (list, tuple)) \
-        #     and len(para_val[0]) == 2 and isinstance(para_val[0][1], str):
-        #     for tensor in para_val:
-        #         api_input_dict[name] = f"np.random.uniform(-1, 1, size={tensor[0]}).astype('{tensor[1]}')"
-        #
-        #         te_str = generate_te_placeholder(name, tensor)
-        #         te_placeholder_str += f"{name} = {te_str}\n"
-        #         para_val = name
         new_config[name] = para_val
     print(te_placeholder_str, new_config)
     return te_placeholder_str, new_config, api_input_dict
@@ -113,7 +103,6 @@ def assign_schedule_params(sig, sch):
     for param_name, param in sig.parameters.items():
         if param_name == "self":
             continue
-        # Handle common schedule parameters
         if param_name == "block":
             if blocks:
                 kwargs["block"] = blocks[0]
@@ -125,35 +114,27 @@ def assign_schedule_params(sig, sch):
                 if loops:
                     kwargs["loop"] = loops[0]
         elif param_name == "new_order":
-            # Special handling for reorder_block_iter_var
             if blocks and blocks[0]:
                 block_rv = blocks[0]
-                # Get the block's iter vars directly from the block reference
-                block = sch.get(block_rv)  # This gets the BlockNode
+                block = sch.get(block_rv)
                 if hasattr(block, 'iter_vars'):
                     iter_vars = block.iter_vars
                     if iter_vars:
-                        # Create a random permutation of the iter vars
                         iter_var_indices = list(range(len(iter_vars)))
                         random.shuffle(iter_var_indices)
                         kwargs["new_order"] = iter_var_indices
         elif param_name.endswith("_index"):
-            # For index parameters, use 0 as default
             kwargs[param_name] = 0
         elif param_name == "factor":
-            # For factors, use a small integer
             kwargs[param_name] = 2
         elif param_name == "preserve_unit_iters":
-            # Boolean parameter
             kwargs[param_name] = True
         elif param_name in ["src_loop", "dst_loop"]:
-            # Handle loop pairs
             if blocks and blocks[0]:
                 loops = sch.get_loops(blocks[0])
                 if len(loops) >= 2:
                     kwargs[param_name] = loops[0 if param_name == "src_loop" else 1]
         else:
-            # For other parameters, try to generate a reasonable default
             if param.annotation == int:
                 kwargs[param_name] = random.randint(-2, 5)
             elif param.annotation == bool:
@@ -164,7 +145,6 @@ def assign_schedule_params(sig, sch):
 
 
 def generate_transform_params(sig, sch):
-    # generate the transform_params by LLMs based on the doc_str
     call_transform = ""
     return call_transform
 
@@ -213,5 +193,3 @@ def model_func({params_str}):
 
 if __name__ == '__main__':
     pass
-
-

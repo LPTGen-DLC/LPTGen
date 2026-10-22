@@ -18,7 +18,6 @@ def parse_info_file(filename, target_folder):
                 continue
 
         elif current_file and target_folder in current_file:
-            # current_file = current_file.split("/path/to/pytorch/source")[-1]  # replace with your local source path if needed
             if any(keyword in current_file for keyword in unused_module):
                 continue
             if line.startswith('FNDA:'):
@@ -57,11 +56,6 @@ def parse_info_file(filename, target_folder):
     print('\n\n')
 
     res_file_base = f"cov_{os.path.split(filename)[-1].split('.')[0]}"
-    # for granularity in ['lines',  'branches']:  # 'functions',
-    #     res_file = f"{res_file_base}_{granularity}.txt"
-    #     with open(res_file, 'w') as f:
-    #         for item in coverage_data[granularity]:
-    #             f.write(f"{item}\n")
     return coverage_data, source_total_num
 
 
@@ -78,7 +72,6 @@ if __name__ == '__main__':
     target_folder = '/path/to/pytorch/source/'  # replace with your local PyTorch source path
     base_dir = "/path/to/coverage"  # replace with your local coverage directory
     proj_list = os.listdir(base_dir)
-    # '''
     cov_dict = {}
     sound_proj_name = {"LPTGen": "LPTGen"}  # "OATest": "OATest"  #'NNSmith': 'NNSmith', "WhiteFox": "WhiteFox",
     for proj in list(sound_proj_name.keys()):
@@ -93,8 +86,6 @@ if __name__ == '__main__':
             if not os.path.exists(info_file):
                 continue
             print(info_file)
-            # if info_file != f"/share_container/optfuzz/res/cov_cumulate/ORT/whitefox/sp_ORT_whitefox_23.info":
-            #     continue
 
             cov_data, total_num = parse_info_file(info_file, target_folder)
             if len(cov_dict[sound_proj_name[proj]]) <= 24:
@@ -117,27 +108,14 @@ if __name__ == '__main__':
     print("branch_cov_dict=", cov_branch_dict)
 
 
-    # base_dir = "/share_container/optfuzz/res/cov_cumulate/ORT/ablation"
-    # ut_info_file = f"{base_dir}/sp_ORT_UT.info"
-    # cov_nnsmith2k = f'{base_dir}/sp_ORT_nnsmith2k.info'
     # # cov_nnsmith4k = f'{base_dir}/sp_ORT_NNSmith4k_0.info'
-    # cov_MT = f"{base_dir}/sp_ORT_MT.info"
     # cov_data, _ = parse_info_file(ut_info_file, target_folder)
     # cov_data, _ = parse_info_file(cov_nnsmith2k, target_folder)
     # cov_data, _ = parse_info_file(cov_MT, target_folder)
 
 
-    # '''
     # parse_info_file('/share_container/optfuzz/res/cov_cumulate/ORT/ModelTailor/sp_MT_ORT_combine_23.info', target_folder)
 
-    # for unique coverage by generate cov data
-    # base_dir = "/software/tvm/_cov"
-    # cov_modeltailor_nnsmith = f"{base_dir}/sp_MT_nnsmith.info"
-    # cov_modeltailor_ut = f"{base_dir}/sp_MT_ut.info"
-    # cov_modeltailor_hirgen = f"{base_dir}/sp_MT_hirgen.info"
     # parse_info_file(cov_modeltailor_nnsmith, target_folder)
     # parse_info_file(cov_modeltailor_ut, target_folder)
     # parse_info_file(cov_modeltailor_hirgen, target_folder)
-
-
-

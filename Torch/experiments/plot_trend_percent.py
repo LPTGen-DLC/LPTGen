@@ -5,18 +5,15 @@ from scipy.interpolate import PchipInterpolator
 
 
 def plot_coverage(data, granularity):
-    # time_points = list(range(1, 21))
     time_points = np.linspace(0, 12, num=25)
     ticks = range(0, 13, 1)
-    # print(time_points)
-    # print(list(ticks))
 
     plt.figure(figsize=(10, 7))
     styles = {
-        'LPTGen':  ('-o', '#2ca02c'),  # 绿色
-        'NNSmith': ('--s', '#ff7f0e'),  # 橙色
-        'WhiteFox': (':x', '#9467bd'),    # 红色
-        'OATest': ('-.v', '#1f99b4'),  # 蓝色
+        'LPTGen':  ('-o', '#2ca02c'),
+        'NNSmith': ('--s', '#ff7f0e'),
+        'WhiteFox': (':x', '#9467bd'),
+        'OATest': ('-.v', '#1f99b4'),
     }
 
     for method, coverage in data.items():
@@ -37,11 +34,11 @@ def plot_coverage(data, granularity):
     plt.tight_layout()
     plt.legend(loc='lower right',
                prop={'size': 24, 'weight': 'bold'},
-               handletextpad=0.5,      # 标记和文字间距
+               handletextpad=0.5,
                labelspacing=0.15,
                borderpad=0.3,
                framealpha=0.5,
-               bbox_to_anchor=(1.01, -0.02),  # 下移一些
+               bbox_to_anchor=(1.01, -0.02),
                )
     plt.savefig(f"trends_{granularity}.pdf")
     plt.show()
@@ -50,9 +47,6 @@ def plot_coverage(data, granularity):
 def preprocess(cov_data):
     cov_data = {k: v[:24] for k, v in cov_data.items()}
     for k, cov_list in cov_data.items():
-        # if k == 'WhiteFox':
-        #     cov_list = double_data(cov_list)
-        # new_cov_list = [i/1000 for i in cov_list]
         new_cov_list = cov_list
         new_cov_list.insert(0, 0)
         print(len(new_cov_list))
@@ -62,13 +56,10 @@ def preprocess(cov_data):
 
 if __name__ == '__main__':
     config = {
-        # "font.family": "sans-serif",  # 使用衬线体
-        # "font.sans-serif": ["Helvetica"],  # 全局默认使用衬线宋体,
-        "font.family": "serif",  # 改为 serif
-        "font.serif": ["Times New Roman"],  # 指定 Times New Roman
+        "font.family": "serif",
+        "font.serif": ["Times New Roman"],
         "font.size": 22,
         "axes.unicode_minus": False,
-        # "mathtext.fontset": "stix",  # 设置 LaTeX 字体，stix 近似于 Times 字体
     }
     matplotlib.rcParams['xtick.labelsize'] = 15
     plt.rcParams.update(config)
@@ -118,7 +109,6 @@ if __name__ == '__main__':
 
     branch_cov_dict = preprocess(branch_cov_dict)
     line_cov_dict = preprocess(line_cov_dict)
-    # func_cov_dict = preprocess(func_cov_dict)
     print("Branch cover:")
     for k, v in branch_cov_dict.items():
         print(k, round(v[-1]/100, 4))
@@ -126,7 +116,6 @@ if __name__ == '__main__':
     print("Line cover:")
     for k, v in line_cov_dict.items():
         print(k, round(v[-1]/100, 4))
-    # print
     plot_coverage(branch_cov_dict, "Branch")
     plot_coverage(line_cov_dict, "Line")
     # plot_coverage(func_cov_dict, "functions")

@@ -82,10 +82,8 @@ def generate_api_inputs(para_config):
 
     new_config = {}
     for k, v in para_config.items():
-        # import pdb;pdb.set_trace()
         if _is_tensor(v):
             new_config[k] = _make_high_dim_tensor(v)
-            # print(new_config[k])
         else:
             new_config[k] = v
     return new_config
@@ -109,9 +107,6 @@ def get_callable_from_aten(op_name: str):
 if __name__ == '__main__':
     input =  [{"self": [([], "float64"), ([2, 2, 2, 2], "float32")]}][-1]
     input = {"indices": [[1, 8], "torch.int64"], "values": [[8], torch.int64], "size": [10, 10], "dtype": torch.int64, "layout": torch.sparse_coo, "device": "cpu", "pin_memory": None, "is_coalesced": False}
-    # input ={"self": [([1,2], "bool")]}
-    # input=[{"params": [[[[768, 64], "float32"], [[768, 128], "float32"], [[768, 64], "float32"], [[768, 128], "float32"], [[768, 64], "float32"], [[768, 128], "float32"], [[768, 64], "float32"], [[768, 128], "float32"]], "list"],}][-1]
-    # input= {"tensors": [[[[6, 4, 2], "bfloat16"]]]}
     print(input)
     res = generate_api_inputs(input)
     print(res)

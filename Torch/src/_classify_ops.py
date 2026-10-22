@@ -2,14 +2,10 @@ import torch
 from collections import defaultdict
 import csv
 
-# -------------------------------
 # Step 1: Get all ATen operators
-# -------------------------------
 aten_ops = torch._C._jit_get_all_schemas()
 
-# -------------------------------
 # Step 2: Refined classification function
-# -------------------------------
 def classify_schema_corrected(schema):
     """More precise classification of ATen operators"""
     op_name = schema.name.lower()
@@ -68,9 +64,7 @@ def classify_schema_corrected(schema):
     # 6. Fallback category
     return 'other'
 
-# -------------------------------
 # Step 3: Build operator metadata
-# -------------------------------
 op_info = {}
 for schema in aten_ops:
     name = schema.name
@@ -84,18 +78,14 @@ for schema in aten_ops:
         'outputs': [ret.name for ret in schema.returns],
     }
 
-# -------------------------------
 # Step 4: Category statistics
-# -------------------------------
 category_count = defaultdict(int)
 for info in op_info.values():
     category_count[info['category']] += 1
 
 total_ops = len(op_info)
 
-# -------------------------------
 # Step 5: Export to CSV
-# -------------------------------
 csv_file = "aten_ops_classification.csv"
 with open(csv_file, mode='w', newline='') as f:
     writer = csv.writer(f)

@@ -16,19 +16,6 @@ env = os.environ.copy()
 env["GCOV_FLUSH_INTERVAL"] = "1"
 
 
-# def _sample_n_seeds(seed_pool, num, target_cluster='default'):
-#     cluster_seed_pair_list = []
-#     all_cluster_name_list = list(seed_pool.keys())
-#     if target_cluster and target_cluster in all_cluster_name_list:
-#         num = min(num, len(seed_pool[target_cluster]))
-#         seed_list = random.sample(seed_pool[target_cluster], num)
-#         cluster_seed_pair_list = [(target_cluster, seed) for seed in seed_list]
-#     else:
-#         for i in range(num):
-#             cluster_name = random.choice(all_cluster_name_list)
-#             seed = random.choice(seed_pool[cluster_name])
-#             cluster_seed_pair_list.append((cluster_name, seed))
-#     return cluster_seed_pair_list
 
 
 def collect_cov(cov_cnt):
@@ -78,7 +65,6 @@ class Fuzzer:
         shutil.copy(test_case_path, self.failure_dir)
 
     def single_task(self, total_test_num, seed_test_file):
-        # print(f"[INFO]: {'==' * 50}")
 
         ret_code, _, stderr = fuzz_utils.run_test(seed_test_file)
         if ret_code:  # detected a bug
@@ -111,8 +97,6 @@ class Fuzzer:
 
         while True:
             # #####################################[Gen Tests]####################################
-            # op_test_files_list = seed_generator.generate_all_tests(self.execution_dir)  # regenerate a set of seeds randomly
-            # op_test_files_list = fuzz_utils.get_all_seed_file("../results/01-09_12-16/res_executions")
             all_tests_file_list = []
 
             all_ops = seed_generator.get_all_operators()
@@ -124,7 +108,6 @@ class Fuzzer:
 
             total_test_count = 0
             for op_name, op_list in all_ops.items():
-                # print(op_name, len(op_list))
                 for schema_id, op in enumerate(op_list):  # each op have several different schemas
                     print(f"[INFO] Test {op.signature}")
                     op_test_files_list = seed_generator.single_op_test_gen(op_name, schema_id, op, self.execution_dir, op_info_4fusion)
@@ -171,7 +154,6 @@ if __name__ == "__main__":
     execution_time = sys.argv[1] if len(sys.argv) > 1 else "13h"
 
     res_dir = os.path.join(res_dir, f"{datetime.now().strftime("%m-%d_%H-%M")}")
-    # res_dir = os.path.join(res_dir, "01-09_12-16")
     if not os.path.exists(res_dir):
         print(res_dir)
         os.makedirs(res_dir)

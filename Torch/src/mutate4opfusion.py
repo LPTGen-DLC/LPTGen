@@ -85,7 +85,6 @@ def mutate_fusion_llm(model_func_str, sub_op, sub_op_signature, seed_input_confi
     res_str = call_llm(prompt_str, stop_str='return out```')
     print(f"[DEBUG] LLM Output: {res_str}")
 
-    # get clear result
     res_str = post_formal_for_llm(res_str)
     print(f"[INFO] The mutated func is:\n{res_str}")
     return res_str
@@ -99,19 +98,3 @@ if __name__ == '__main__':
 """
 
     res = mutate_fusion_llm(ori_model, "torch.ops.aten.argwhere", 'aten::argwhere(Tensor self) -> Tensor','',)
-
-    # res = mutate_op_seq(seed_test_file, "torch.ops.aten.argwhere", "aten::argwhere(Tensor self) -> Tensor", '')
-    # print(res)
-
-#     res = '''PYTHON]
-# def model_func(grad_output, self):
-#     out = torch.ops.aten.hardswish_backward(grad_output, self=self,)
-#     out = torch.ops.aten.fix.out(out, out=torch.empty_like(out))
-#     return out
-# [/PYTHON]
-#
-#     '''
-#     res = post_formal_for_llm(res)
-#     print(res)
-
-    # res = mutate_fusion_llm_via_FIM(ori_model, "torch.ops.aten.argwhere", 'aten::argwhere(Tensor self) -> Tensor','',)

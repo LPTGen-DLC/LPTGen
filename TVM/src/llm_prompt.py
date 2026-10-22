@@ -9,7 +9,6 @@ def generate_para_configs(op_func):
     doc_str = inspect.getdoc(op_func)
     para_list = [p.name for p in sig.parameters.values()]
     print(para_list)
-    # assert False
 
     config_size = 3
     prompt_str = f"""Generate {config_size} diverse API parameter configurations for {op_name} strictly following requirements:

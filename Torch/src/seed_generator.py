@@ -13,9 +13,6 @@ import mutate4opfusion
 random.seed(2026)
 
 
-# os.environ["TORCHINDUCTOR_MAX_AUTOTUNE"] = "1"
-# os.environ["TORCHINDUCTOR_MAX_AUTOTUNE_GEMM"]="1"
-# os.environ["TORCHINDUCTOR_EMULATE_PRECISION_CASTS"]='1'
 seed_str_header = '''import sys
 import os
 import torch
@@ -68,7 +65,6 @@ def get_all_operators():
             print(f'[INFO] The conditions of {schema.name} is: ', lower_conditions)
 
         doc_str = None
-        # print(f"{schemas.name}:   {schema_str} ")
         op_obj = my_obj.Operator(name=schema.name,
                                  parameters=params,
                                  returns=returns,
@@ -139,7 +135,6 @@ def generate_single_seed(op_name, para_config, seed_file_path='seed_tmp.py'):
         if len(param_list) > 1:
             for para in param_list[1:]:
                 params_kv_str += f"{para}={para},"  # for support the keyword-only parameter
-        # print(f"debug:{params_kv_str}")
         return params_kv_str
 
     param_kv_str = _get_double_para_str(all_params)
@@ -153,9 +148,7 @@ def model_func({params_str}):
 
     new_input_config = torch_utils.generate_api_inputs(para_config)
     op_input_str = "input_config = {"
-    # import pdb;pdb.set_trace()
     for k, v in new_input_config.items():
-        # if ((k == 'dtype' and isinstance(v, str)) or
         if isinstance(v, str) and v in torch_utils.dtype_map.keys():
             op_input_str += f"'{k}':torch.{v},"
         # high-order tensor
@@ -169,7 +162,6 @@ def model_func({params_str}):
         else:
             op_input_str += f"'{k}':{v},"
     op_input_str += "}"
-    # print(op_input_str)
     op_input_str = f'''try:
     {op_input_str}
 except Exception as e:
@@ -184,29 +176,6 @@ except Exception as e:
     return seed_str
 
 
-# def generate_all_tests(seed_dir="../results", total_test_num=500000):
-#     if not os.path.exists(seed_dir):
-#         os.mkdir(seed_dir)
-#     all_tests_file_list = []
-#     all_ops = get_all_operators()
-#     items = list(all_ops.items())
-#     random.shuffle(items)
-#     all_ops = dict(items)
-#
-#     op_info_4fusion = get_fusion_rules.build_op_info()
-#
-#     total_test_count = 0
-#     for op_name, op_list in all_ops.items():
-#         # print(op_name, len(op_list))
-#         for schema_id, op in enumerate(op_list):  # each op have several different schemas
-#             print(f"[INFO] Test {op.signature}")
-#             op_test_filelist = single_op_test_gen(schema_id, op, seed_dir, op_info_4fusion)
-#             all_tests_file_list.extend(op_test_filelist)
-#
-#             total_test_count += len(op_test_filelist)
-#             if total_test_count >= total_test_num:
-#                 return all_tests_file_list
-#     return all_tests_file_list
 
 
 
@@ -270,6 +239,4 @@ if __name__ == '__main__':
                         ]
 
 
-    # res = generate_single_seed(op_name, para_config_list[-1])
-    # print(res)
     get_all_operators()
