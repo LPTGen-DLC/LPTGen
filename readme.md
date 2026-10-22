@@ -78,8 +78,8 @@ python fuzz.py
 
 ## 🐛 Bugs Detected by LPTGen (Fixed)
 
-> We uncovered **84 previously unknown bugs**: **40 in PyTorch Inductor** and **44 in Apache TVM**. 
-Of these, **69 have been fixed**: **29 in PyTorch Inductor** and **40 in Apache TVM**.
+> We uncovered **79 previously unknown bugs**: **40 in PyTorch Inductor** and **39 in Apache TVM**. 
+Of these, **64 have been fixed**: **29 in PyTorch Inductor** and **35 in Apache TVM**.
 
 The list below includes LPTGen detected bugs that has been fixed by developers. 
 Each item links directly to the corresponding public issue report. 
@@ -116,7 +116,7 @@ Each item links directly to the corresponding public issue report.
 - ✅ **Fixed** · [Floating point exception (core dumped) for nonzero_static operator](https://github.com/pytorch/pytorch/issues/162473)
 - ✅ **Fixed** · [inductor backend produces numerically divergent results vs eager for aten.cumprod_backward](https://github.com/pytorch/pytorch/issues/172062)
 
-### Apache TVM (40 fixed bugs)
+### Apache TVM (35 fixed bugs)
 
 - ✅ **Fixed** · [tvm.tir.schedule.schedule.ScheduleError](https://github.com/apache/tvm/issues/18380)
 - ✅ **Fixed** · [Cannot find intrinsic declaration, possible type mismatch: llvm.sin](https://github.com/apache/tvm/issues/18769)
@@ -131,13 +131,11 @@ Each item links directly to the corresponding public issue report.
 - ✅ **Fixed** *2 · [Do not have a default for tir.AssertStmt](https://github.com/apache/tvm/issues/18387)
 - ✅ **Fixed** · [Crash when multiple PrimFunc objects are present in IRModule](https://github.com/apache/tvm/issues/18383)
 - ✅ **Fixed** · [Cannot find intrinsic declaration, possible type mismatch: llvm.exp](https://github.com/apache/tvm/issues/18381)
-- ✅ **Fixed** · [Fix conflict parameter name promote_dtye in FP8ComputeLegalize](https://github.com/apache/tvm/issues/18334)
 - ✅ **Fixed** · [Cannot find intrinsic declaration, possible type mismatch: llvm.log10](https://github.com/apache/tvm/issues/17996)
 - ✅ **Fixed** · [Fix zero-extent loops in PerStoreFeature to prevent crashes](https://github.com/apache/tvm/issues/17995)
 - ✅ **Fixed** · [Add registion for the operator erf in llvm](https://github.com/apache/tvm/issues/17976)
 - ✅ **Fixed** · [Fix FLOP estimation for EvaluateNode](https://github.com/apache/tvm/issues/17974)
 - ✅ **Fixed** *3 · [Add registion for the operator asinh, acosh, atanh in llvm](https://github.com/apache/tvm/issues/17969)
-- ✅ **Fixed** · [Fix incorrect docstring in topi softmax ](https://github.com/apache/tvm/issues/17844)
 - ✅ **Fixed** · [Fix basic FLOP estimation for WhileNode](https://github.com/apache/tvm/issues/17961)
 - ✅ **Fixed** · [Fix sqrt/rsqrt Compatibility with Integer Data Types](https://github.com/apache/tvm/issues/17953)
 - ✅ **Fixed** *3 · [Add registion for the operator asin and acos in llvm](https://github.com/apache/tvm/issues/17945)
@@ -146,9 +144,16 @@ Each item links directly to the corresponding public issue report.
 - ✅ **Fixed** · [InternalError: Check failed: (eval_vec_) is false](https://github.com/apache/tvm/issues/17936)
 - ✅ **Fixed** · [parallel_for_dynamic error with ScheduleError: (not rendered)](https://github.com/apache/tvm/issues/17934)
 - ✅ **Fixed** · [sch.mod returns None after meta scheduling](https://github.com/apache/tvm/issues/17933)
-- ✅ **Fixed** *2 · [Fix docstring in batch_to_space_nd and bitpack](https://github.com/apache/tvm/issues/17848)
 - ✅ **Fixed** · [Array declaration of expr occurred multiple times](https://github.com/apache/tvm/issues/17847)
+
+
+In addition, LPTGen uncovered five documentation bugs during operator schema extraction and configuration instantiation. 
+All five were fixed by developers and are excluded from the compiler bug counts reported above.
+
+- ✅ **Fixed** · [Fix conflict parameter name promote_dtye in FP8ComputeLegalize](https://github.com/apache/tvm/issues/18334)
+- ✅ **Fixed** · [Fix incorrect docstring in topi softmax ](https://github.com/apache/tvm/issues/17844)
 - ✅ **Fixed** · [fixing incorrect docstring in upsampling.py](https://github.com/apache/tvm/issues/17845)
+- ✅ **Fixed** *2 · [Fix docstring in batch_to_space_nd and bitpack](https://github.com/apache/tvm/issues/17848)
 
 
 
