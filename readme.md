@@ -12,7 +12,7 @@ along with the scripts needed to reproduce the main experimental results.
 
 - Supports **two DL compilers**: PyTorch Inductor and Apache TVM.
 - Includes **Two reusable prompts** used by the LLM-assisted workflow.
-- Summarizes the **84 previously unknown bugs** discovered by LPTGen.
+- Summarizes the **79 previously unknown bugs** discovered by LPTGen.
 - Reproduces **coverage** results (Fig 7 and 8 in our paper)
 
 ## 📁 Repository Layout
