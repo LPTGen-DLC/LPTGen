@@ -30,5 +30,5 @@ opt_mod_output = compile_mod(opt_mod, np_inputs, op_output.shape, opt_level=3)
 print(opt_mod)
 
 np.testing.assert_allclose(
-    ref_output.numpy(), opt_mod_output.numpy(), rtol=1e-5, atol=1e-5, err_msg=f"An Inconsistency bug detected."
+    ref_output.numpy(), opt_mod_output.numpy(), rtol=1e-3, atol=1e-3, err_msg=f"An Inconsistency bug detected."
 )

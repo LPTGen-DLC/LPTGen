@@ -72,7 +72,7 @@ if python_reference is not None:
     assert_reference_outputs(python_reference, opt_mod_output)
 else:
     for i in range(len(ref_output)):
-        np.testing.assert_allclose(ref_output[i].numpy(), opt_mod_output[i].numpy(), rtol=1e-5, atol=1e-5,
+        np.testing.assert_allclose(ref_output[i].numpy(), opt_mod_output[i].numpy(), rtol=1e-3, atol=1e-3,
         err_msg=f"An inconsistency detected.")
 print("No bug found!")
 

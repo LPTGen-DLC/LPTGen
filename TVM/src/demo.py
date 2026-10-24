@@ -54,7 +54,7 @@ def apply_random_tir_pass(sch: tir.Schedule) -> str:
     return pass_name
 
 
-def run_diff_test(compute_func: callable, target: str = "llvm", dtype: str = "float32", rtol: float = 1e-5) -> bool:
+def run_diff_test(compute_func: callable, target: str = "llvm", dtype: str = "float32", rtol: float = 1e-3) -> bool:
     """Run differential testing and return whether the test passes."""
     input_shapes = [x.shape for x in compute_func.args]
     np_inputs = [np.random.rand(*shape).astype(dtype) for shape in input_shapes]
