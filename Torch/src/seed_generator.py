@@ -205,6 +205,10 @@ def single_op_test_gen(op_name, schema_id, op, seed_dir, op_info_4fusion):
                 generate_single_seed(op_name, mutated_para_config, mutated_test_file)
                 all_test_file_list.append(mutated_test_file)
 
+        # Fusion is opt-in; spawned workers inherit the environment.
+        if os.getenv("LPTGEN_ENABLE_FUSION", "0") != "1":
+            continue
+
         # mutate each seed based on op fusion
         assert op_name.startswith("aten:"), f"incorrect op name format (e.g., {op_name})"
         fusion_op_candidates = get_fusion_rules.get_fusion_candidates(op_name, op_info_4fusion)

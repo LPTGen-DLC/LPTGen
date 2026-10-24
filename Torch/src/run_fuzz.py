@@ -104,7 +104,8 @@ class Fuzzer:
             random.shuffle(items)
             all_ops = dict(items)
 
-            op_info_4fusion = get_fusion_rules.build_op_info()
+            op_info_4fusion = (get_fusion_rules.build_op_info()
+                               if os.getenv("LPTGEN_ENABLE_FUSION", "0") == "1" else None)
 
             total_test_count = 0
             for op_name, op_list in all_ops.items():

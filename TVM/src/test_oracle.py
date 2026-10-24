@@ -73,7 +73,6 @@ _REFERENCE_NAMES = {
     "topi.nn.pool_grad": "pool_grad_nchw",
     **{f"topi.image.resize{n}d": f"resize{n}d_python" for n in (1, 2, 3)},
 }
-# TODO: Verify attention, LSTM, backward-weight, packed layouts and non-trailing norm axes.
 
 
 def _reference_arguments(op_name, arguments, testing):

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# 2017, Georg Sauthoff <mail@gms.tf>, GPLv3
-# 2022, Alexander Stohr, ZF Friedrichshafen AG: benign handling of UTF-8 violations
 
 import sys
 
@@ -92,7 +90,6 @@ def filter_lcov_trace(lines):
             file_name = line[3:-1]
             if not os.path.exists(file_name):
                 print(file_name)
-                # todo: remove all coverage info in this file.
                 nrs = set()  # no condition in this file
             else:
                 nrs = set(cond_lines_from_file(file_name))

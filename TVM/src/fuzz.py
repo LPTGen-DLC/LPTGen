@@ -164,6 +164,10 @@ def fuzz_single_api(op_name: str, op_func: Callable, all_operators, max_schedule
             f.write(full_test_str)
         execute_test(new_test_path)  # Execute the test
 
+        # Fusion is opt-in; spawned workers inherit the environment.
+        if os.getenv("LPTGEN_ENABLE_FUSION", "0") != "1":
+            continue
+
         # Mutate for operator fusion
         seed_test_file = new_test_path
         fusion_count = 3
