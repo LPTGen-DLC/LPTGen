@@ -149,6 +149,27 @@ def apply_safe_transform(mod):
 
 def fuzz_single_api(op_name: str, op_func: Callable, all_operators, max_schedules: int = 3):
     para_config_list = generate_para_configs(op_func, 5)
+    if os.getenv("LPTGEN_USE_PREDICATES", "1") == "1":  # Set to 0 for the original configuration flow.
+        try:
+            from collect_topi_lowering_knowledge import extract_conditions_from_fn
+            from mutate_params import mutate_para_configs
+
+            sig = inspect.signature(op_func)
+            if any(p.kind != inspect.Parameter.POSITIONAL_OR_KEYWORD for p in sig.parameters.values()):
+                raise ValueError("predicate mutation requires named positional parameters")
+            conditions = extract_conditions_from_fn(op_func)
+            for seed in list(para_config_list):
+                for condition in conditions:
+                    try:
+                        configs = mutate_para_configs(op_name, str(sig), seed, condition, inspect.getdoc(op_func) or "")
+                        for config in configs:
+                            bound = sig.bind(**config)
+                            bound.apply_defaults()
+                            para_config_list.append(dict(bound.arguments))
+                    except Exception as exc:
+                        print(f"[INFO] Skip predicate mutation for {op_name}: {exc}")
+        except Exception as exc:
+            print(f"[INFO] Use original configurations for {op_name}: {exc}")
     for test_id, para_config in enumerate(para_config_list):
         te_placeholder_str, new_config, inputs_dict = tvm_utils.generate_api_inputs(para_config)
         print(f'[INFO] generated config for the {op_name}:', new_config)
