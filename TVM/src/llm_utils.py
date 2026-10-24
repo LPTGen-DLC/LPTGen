@@ -27,10 +27,11 @@ def call_llm(user_prompt, examples=[], stop_str="```"):
     for _ in range(5):
         try:
             response = client.chat.completions.create(
-                model="deepseek-chat",
+                model="deepseek-flash",
                 messages=messages,
                 stop=[stop_str],
                 temperature=0.8,
+                max_tokens=2048,
             )
             return response.choices[0].message.content
         except Exception as e:
